@@ -9,14 +9,21 @@ HEADERS = { 'accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,im
 soup = BeautifulSoup(page.text, "html.parser")
 
 #req = requests.get(url)
-all_matches = soup.find_all('div', {'class': 'foot-market'})
+all_matches = soup.find_all('div', {'class': 'category-container'})
 
 for match in all_matches:
-    #print(soup.find('table',attrs={'class': 'coupon-row-item coupone-labels'})) Шапка блока
-    first_command = match.find_all('a',class_ = 'member-link')[0]
-    second_command = match.find_all('a', class_='member-link')[1]
-    print(first_command.get_text() + '-' + second_command.get_text())
-    print(second_command.get_text())
+    #print(match)
+    #print(5467457567567567567)
+    #--print(match.find_all('table',attrs={'class': 'coupon-row-item coupone-labels'})[0]) #Шапка блока
+    #headers = match.find_all('div',class_='category-label-block')[0] #Все заголовки
+    #header_1 = headers.find_all('span', class_ = 'nowrap')[0]  #Первый заголовок
+    #header_2 = headers.find_all('span', class_='nowrap')[1] #Второй заголовок (Добавить третий, не везде есть)
+    #first_command = match.find_all('a',class_ = 'member-link')[0] #Первая команда
+    #second_command = match.find_all('a', class_='member-link')[1] #Вторая команда
+    match_time = match.find_all('table',attrs={'class': 'coupon-row-item'})[0]
+    print(match_time)
+    print(4444444444444444)
+
     # for one in one_matches:
     #     print(one.find('a',class_ = 'member-link'))
 
