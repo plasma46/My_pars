@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import pandas as pd
 
 
 url = 'https://www.marathonbet.ru/su/live/26418'
@@ -10,22 +11,38 @@ soup = BeautifulSoup(page.text, "html.parser")
 
 #req = requests.get(url)
 all_matches = soup.find_all('div', {'class': 'category-container'})
-
+a = []
 for match in all_matches:
+
     #print(match)
     #print(5467457567567567567)
-    #--print(match.find_all('table',attrs={'class': 'coupon-row-item coupone-labels'})[0]) #Шапка блока
-    #headers = match.find_all('div',class_='category-label-block')[0] #Все заголовки
-    #header_1 = headers.find_all('span', class_ = 'nowrap')[0]  #Первый заголовок
-    #header_2 = headers.find_all('span', class_='nowrap')[1] #Второй заголовок (Добавить третий, не везде есть)
-    #first_command = match.find_all('a',class_ = 'member-link')[0] #Первая команда
-    #second_command = match.find_all('a', class_='member-link')[1] #Вторая команда
-    match_time = match.find_all('table',attrs={'class': 'coupon-row-item'})[0]
-    print(match_time)
-    print(4444444444444444)
+    headers = match.find_all('div',class_='category-label-block')[0] #Все заголовки
+    header_1 = headers.find_all('span', class_ = 'nowrap')[0]  #Первый заголовок
+    header_2 = headers.find_all('span', class_='nowrap')[1] #Второй заголовок (Добавить третий, не везде есть)
+    a.append ({ 'headers': header_1.get_text()+ ' ' + header_2.get_text()})
+    print(header_1.get_text()+ ' ' + header_2.get_text())
+    first_command = match.find_all('a',class_ = 'member-link')[0] #Первая команда
+    a.append({'first_command':(first_command.get_text()) })
+    print(first_command.get_text())
+    second_command = match.find_all('a', class_='member-link')[1] #Вторая команда
+    a.append( {'second_command': second_command.get_text()} )
+    print(second_command.get_text())
+    try:
+        match_time = match.find_all('div',class_='green bold nobr')[0] #Время матча
+        a.append( {'match_time': match_time.get_text()})
+        print(match_time.get_text())
+    except Exception:
+        a.append({'match_time': 'error'})
+        print('error')
+    score = match.find_all('div',class_='cl-left red')[0] #Счёт
+    score.span.decompose()  # Убираем вложеные теги
+    a.append({ 'score' : score.get_text() })
+    print(score.get_text())
+    print(a)
+    print('END match')
 
-    # for one in one_matches:
-    #     print(one.find('a',class_ = 'member-link'))
 
-# <a class="member-link" href="/su/live/12503189">
-# <span data-member-link="true">Шимшон Кафр Касим</span>
+
+df = pd.DataFrame(a)
+print(df)
+
